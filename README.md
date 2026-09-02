@@ -1,15 +1,29 @@
 # LRU Cache
 
-A focused implementation workspace for exploring **Least Recently Used (LRU) cache** design and eviction behavior.
+A compact Python implementation of a fixed-capacity **Least Recently Used (LRU) cache** with tests covering eviction and recency behavior.
 
-## Planned Design
+## Design
 
-An LRU cache keeps frequently accessed entries available while evicting the least recently used entry when capacity is reached. A typical implementation combines a hash map for O(1) lookup with a doubly linked list for O(1) recency updates and eviction.
+The cache uses Python's `OrderedDict` to maintain insertion/access order. Reads promote the accessed key to the most-recent position; when capacity is exceeded, the least-recent entry is evicted.
 
-## Status
+### Complexity
 
-The repository is currently empty of implementation code. This README documents the intended project rather than claiming an implementation that is not present.
+- `get`: O(1) average case
+- `put`: O(1) average case
+- Space: O(capacity)
 
-## Resume Note
+## Run Tests
 
-Do not list this repository as a completed project on a resume until the cache implementation and tests are added.
+```bash
+python -m pytest -q
+```
+
+## Tech Stack
+
+**Python · Data Structures · Caching · Unit Testing**
+
+## Resume Description
+
+**LRU Cache | Python, Data Structures, Pytest**
+
+Implemented a fixed-capacity LRU cache with O(1) average-case lookup, insertion, recency updates, and eviction using an ordered hash-map abstraction. Added unit tests covering least-recently-used eviction, key updates, and invalid-capacity handling.
