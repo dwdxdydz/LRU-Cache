@@ -40,3 +40,37 @@ def test_stats_track_misses_and_evictions():
 def test_invalid_capacity():
     with pytest.raises(ValueError):
         LRUCache(0)
+
+
+@pytest.mark.parametrize("capacity", [1.5, "2", True])
+def test_capacity_must_be_an_integer(capacity):
+    with pytest.raises(TypeError):
+        LRUCache(capacity)
+
+
+def test_peek_does_not_change_recency_or_statistics():
+    cache = LRUCache(2)
+    cache.put("a", 1)
+    cache.put("b", 2)
+
+    assert cache.peek("a") == 1
+    assert cache.peek("missing", "fallback") == "fallback"
+    assert cache.stats() == {"hits": 0, "misses": 0, "evictions": 0}
+
+    cache.put("c", 3)
+    assert "a" not in cache
+
+
+def test_clear_and_reset_stats_have_independent_effects():
+    cache = LRUCache(1)
+    cache.put("a", 1)
+    cache.get("a")
+    cache.get("missing")
+    cache.put("b", 2)
+
+    cache.clear()
+    assert len(cache) == 0
+    assert cache.stats() == {"hits": 1, "misses": 1, "evictions": 1}
+
+    cache.reset_stats()
+    assert cache.stats() == {"hits": 0, "misses": 0, "evictions": 0}
