@@ -1,28 +1,51 @@
-# LRU Cache
+# ⚡ LRU Cache
 
-A fixed-capacity **Least Recently Used cache** implemented with Python's `OrderedDict`, with edge-case tests, cache statistics, and a small performance benchmark.
+A fixed-capacity **Least Recently Used (LRU) cache** implemented with Python's `OrderedDict`, including edge-case tests, cache statistics, and a lightweight performance benchmark.
 
 ## Design
 
-Accessing an item promotes it to the most-recent position. When capacity is exceeded, the least-recent item is evicted.
+```text
+get(key)
+  ↓
+Found? ── Yes → return value + promote to MRU
+  │
+ No → record miss + return default
+
+put(key, value)
+  ↓
+Store / update value
+  ↓
+Capacity exceeded?
+  ↓ Yes
+Evict least-recently-used item
+```
+
+## Complexity
 
 - `get`: O(1) average case
 - `put`: O(1) average case
+- `peek`: O(1) average case
 - Space: O(capacity)
-- Tracks hits, misses, and evictions
-- Correctly distinguishes a missing key from a stored `None`
-- Provides `peek` for inspection without changing recency or statistics
-- Validates capacity eagerly (positive integers only)
 
-## API notes
+## Features
 
-- `get(key, default=None)` returns a value, promotes a hit to most-recently
-  used, and records a hit or miss.
-- `peek(key, default=None)` returns a value without promoting it or changing
-  statistics. This is useful for diagnostics and conditional logic.
-- `clear()` removes values but retains statistics, while `reset_stats()` resets
-  counters without removing values. Keeping these operations separate makes
-  reporting windows explicit.
+- Fixed capacity
+- LRU eviction
+- Hit, miss, and eviction statistics
+- Correct handling of a stored `None` value
+- `peek()` for inspection without changing recency/statistics
+- `clear()` and `reset_stats()` with explicit semantics
+- Eager capacity validation
+- Automated tests
+- Performance benchmark
+
+## API
+
+- `get(key, default=None)` — returns a value and promotes a hit to most-recently-used
+- `put(key, value)` — inserts or updates an item
+- `peek(key, default=None)` — reads without changing recency/statistics
+- `clear()` — removes cached values while retaining statistics
+- `reset_stats()` — resets counters without removing cached values
 
 ## Run
 
@@ -31,6 +54,13 @@ python -m pytest -q
 python benchmark.py
 ```
 
-## Resume value
+## Portfolio value
 
-Demonstrates practical data-structure design, API semantics, unit testing, complexity analysis, and lightweight performance measurement.
+Demonstrates **data-structure design, Python API design, algorithmic complexity, unit testing, edge-case handling, performance measurement, and software engineering fundamentals**.
+
+## Future improvements
+
+- Compare performance with `functools.lru_cache`
+- Larger benchmark workloads
+- Optional TTL support
+- Optional thread-safe implementation
