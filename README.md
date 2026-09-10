@@ -2,15 +2,15 @@
 
 ## What is this project?
 
-An **LRU Cache** is a small storage area that keeps recently used information so it can be retrieved quickly.
+An **LRU Cache (Least Recently Used Cache)** is a small storage area that keeps recently used information so it can be retrieved quickly.
 
 This project is a Python implementation of an LRU cache.
 
-A simple example is a website that repeatedly needs the same information. Instead of calculating or downloading the information every time, the program can temporarily keep it in the cache.
+For example, a website may repeatedly need the same information. Instead of doing the expensive work every time, the program can temporarily keep the result in a cache.
 
 The cache has a fixed size. When it becomes full, it removes the item that has been unused for the longest time.
 
-## Example
+## Simple example
 
 Imagine the cache can store only 3 items:
 
@@ -43,7 +43,7 @@ C A D
 B is removed because B was used least recently.
 ```
 
-This is what **Least Recently Used (LRU)** means.
+That is the **Least Recently Used** rule.
 
 ## How does it work?
 
@@ -75,8 +75,6 @@ Store new value
 
 Caching can make applications faster because frequently used information can be returned without doing the expensive work again.
 
-For example:
-
 ```text
 Without cache:
 Request → expensive operation → result
@@ -91,41 +89,32 @@ Request → return saved result
 
 ## Features
 
-- Fixed maximum capacity.
-- Automatically removes old/unused items.
-- Fast `get()` and `put()` operations.
-- Tracks cache hits, misses and evictions.
-- Correctly handles a stored `None` value.
-- `peek()` lets you inspect a value without changing its usage order.
-- `clear()` removes stored values.
-- `reset_stats()` resets usage counters.
-- Includes automated tests.
-- Includes a small performance benchmark.
+- Fixed maximum capacity
+- Automatically removes the least recently used item
+- Fast `get()` and `put()` operations
+- Tracks cache hits, misses and evictions
+- Correctly handles a stored `None` value
+- `peek()` reads a value without changing its usage order
+- `clear()` removes stored values
+- `reset_stats()` resets usage counters
+- Automated tests
+- Performance benchmark
 
 ## Main operations
 
 ```text
-get(key)
-→ Get a value from the cache.
-
-put(key, value)
-→ Add or update a value.
-
-peek(key)
-→ Look at a value without marking it as recently used.
-
-clear()
-→ Remove everything from the cache.
-
-reset_stats()
-→ Reset hit/miss/eviction counters.
+get(key)   → Get a value from the cache.
+put(key, value) → Add or update a value.
+peek(key)  → Look at a value without marking it as recently used.
+clear()    → Remove everything from the cache.
+reset_stats() → Reset hit/miss/eviction counters.
 ```
 
 ## Why is it fast?
 
-The implementation uses Python's `OrderedDict`, which allows the cache to quickly move recently used items and remove the oldest item.
+The implementation uses Python's `OrderedDict` to keep track of item order efficiently.
 
-Average complexity:
+The average complexity is:
 
 ```text
 get  → O(1)
@@ -133,9 +122,9 @@ put  → O(1)
 peek → O(1)
 ```
 
-`O(1)` means the operation takes roughly the same amount of work even as the cache gets larger.
+## Run the project
 
-## Run the tests
+Run the tests:
 
 ```bash
 python -m pytest -q
@@ -156,28 +145,41 @@ benchmark.py       → Performance benchmark
 README.md          → Project documentation
 ```
 
-## Main technologies
+## Technical terms explained
 
-- **Python** — implementation
-- **OrderedDict** — stores the cache in usage order
-- **Pytest** — automated testing
+**Cache** — Temporary storage for information that may be needed again soon. The goal is to avoid repeating expensive work.
 
-## What I learned
+**LRU (Least Recently Used)** — A rule for deciding what to remove when a cache is full: remove the item that has not been used for the longest time.
 
-This project demonstrates how a common computer-science data structure works in practice.
+**Eviction** — Removing an item from the cache to make room for another item.
 
-It focuses on:
+**Cache hit** — The requested item is already in the cache, so it can be returned immediately.
 
-- Data structures
-- Algorithm efficiency
-- API design
-- Edge cases
-- Unit testing
-- Performance measurement
+**Cache miss** — The requested item is not in the cache.
+
+**OrderedDict** — A Python dictionary-like data structure that keeps track of item order. It is useful here because the cache needs to know which item is oldest and which is newest.
+
+**O(1)** — A measure of algorithm efficiency. It means the amount of work for the operation stays roughly constant as the number of stored items grows.
+
+**O(capacity)** — The memory used grows with the maximum number of items the cache can store.
+
+**API** — The set of functions or methods that other code can use to interact with a component. Here, `get()`, `put()` and `peek()` form the main cache interface.
+
+**Benchmark** — A performance test that measures how quickly code performs under a particular workload.
+
+**Unit test** — A small automated test that checks whether one part of a program behaves correctly.
+
+## What does this project demonstrate?
+
+This small project covers an important computer-science concept and shows how it can be turned into a usable Python component:
+
+**Data structure → API design → edge cases → efficiency → testing → benchmarking**
+
+It demonstrates **Python, data structures, algorithmic complexity, API design, testing and performance measurement**.
 
 ## Future improvements
 
-- Compare performance with Python's built-in `functools.lru_cache`.
-- Add larger benchmark workloads.
-- Add optional time-based expiration (TTL).
-- Add an optional thread-safe implementation.
+- Compare performance with Python's built-in `functools.lru_cache`
+- Test with larger workloads
+- Add optional TTL (time-to-live) support
+- Add an optional thread-safe implementation
