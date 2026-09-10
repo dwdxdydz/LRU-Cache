@@ -1,66 +1,183 @@
 # ⚡ LRU Cache
 
-A fixed-capacity **Least Recently Used (LRU) cache** implemented with Python's `OrderedDict`, including edge-case tests, cache statistics, and a lightweight performance benchmark.
+## What is this project?
 
-## Design
+An **LRU Cache** is a small storage area that keeps recently used information so it can be retrieved quickly.
+
+This project is a Python implementation of an LRU cache.
+
+A simple example is a website that repeatedly needs the same information. Instead of calculating or downloading the information every time, the program can temporarily keep it in the cache.
+
+The cache has a fixed size. When it becomes full, it removes the item that has been unused for the longest time.
+
+## Example
+
+Imagine the cache can store only 3 items:
 
 ```text
-get(key)
-  ↓
-Found? ── Yes → return value + promote to MRU
-  │
- No → record miss + return default
+Add A
+Add B
+Add C
 
-put(key, value)
-  ↓
-Store / update value
-  ↓
-Capacity exceeded?
-  ↓ Yes
-Evict least-recently-used item
+Cache:
+A B C
 ```
 
-## Complexity
+Now A is used again:
 
-- `get`: O(1) average case
-- `put`: O(1) average case
-- `peek`: O(1) average case
-- Space: O(capacity)
+```text
+Use A
+
+Cache:
+B C A   ← A is now the most recently used
+```
+
+Now D is added:
+
+```text
+Add D
+
+Cache:
+C A D
+
+B is removed because B was used least recently.
+```
+
+This is what **Least Recently Used (LRU)** means.
+
+## How does it work?
+
+```text
+Request a value
+      ↓
+Is it in the cache?
+   ↙          ↘
+ Yes           No
+  ↓             ↓
+Return it     Return default
+  ↓
+Mark it as recently used
+```
+
+When a new value is added:
+
+```text
+Add value
+   ↓
+Cache full?
+   ↓ Yes
+Remove least recently used value
+   ↓
+Store new value
+```
+
+## Why use a cache?
+
+Caching can make applications faster because frequently used information can be returned without doing the expensive work again.
+
+For example:
+
+```text
+Without cache:
+Request → expensive operation → result
+Request → expensive operation → result
+Request → expensive operation → result
+
+With cache:
+Request → expensive operation → save result
+Request → return saved result
+Request → return saved result
+```
 
 ## Features
 
-- Fixed capacity
-- LRU eviction
-- Hit, miss, and eviction statistics
-- Correct handling of a stored `None` value
-- `peek()` for inspection without changing recency/statistics
-- `clear()` and `reset_stats()` with explicit semantics
-- Eager capacity validation
-- Automated tests
-- Performance benchmark
+- Fixed maximum capacity.
+- Automatically removes old/unused items.
+- Fast `get()` and `put()` operations.
+- Tracks cache hits, misses and evictions.
+- Correctly handles a stored `None` value.
+- `peek()` lets you inspect a value without changing its usage order.
+- `clear()` removes stored values.
+- `reset_stats()` resets usage counters.
+- Includes automated tests.
+- Includes a small performance benchmark.
 
-## API
+## Main operations
 
-- `get(key, default=None)` — returns a value and promotes a hit to most-recently-used
-- `put(key, value)` — inserts or updates an item
-- `peek(key, default=None)` — reads without changing recency/statistics
-- `clear()` — removes cached values while retaining statistics
-- `reset_stats()` — resets counters without removing cached values
+```text
+get(key)
+→ Get a value from the cache.
 
-## Run
+put(key, value)
+→ Add or update a value.
+
+peek(key)
+→ Look at a value without marking it as recently used.
+
+clear()
+→ Remove everything from the cache.
+
+reset_stats()
+→ Reset hit/miss/eviction counters.
+```
+
+## Why is it fast?
+
+The implementation uses Python's `OrderedDict`, which allows the cache to quickly move recently used items and remove the oldest item.
+
+Average complexity:
+
+```text
+get  → O(1)
+put  → O(1)
+peek → O(1)
+```
+
+`O(1)` means the operation takes roughly the same amount of work even as the cache gets larger.
+
+## Run the tests
 
 ```bash
 python -m pytest -q
+```
+
+Run the benchmark:
+
+```bash
 python benchmark.py
 ```
 
-## Portfolio value
+## Project structure
 
-Demonstrates **data-structure design, Python API design, algorithmic complexity, unit testing, edge-case handling, performance measurement, and software engineering fundamentals**.
+```text
+lru_cache.py       → LRU cache implementation
+test_lru_cache.py  → Automated tests
+benchmark.py       → Performance benchmark
+README.md          → Project documentation
+```
+
+## Main technologies
+
+- **Python** — implementation
+- **OrderedDict** — stores the cache in usage order
+- **Pytest** — automated testing
+
+## What I learned
+
+This project demonstrates how a common computer-science data structure works in practice.
+
+It focuses on:
+
+- Data structures
+- Algorithm efficiency
+- API design
+- Edge cases
+- Unit testing
+- Performance measurement
 
 ## Future improvements
 
-- Compare performance with `functools.lru_cache`
-- Larger benchmark workloads
-- Optional TTL support
-- Optional thread-safe implementation
+- Compare performance with Python's built-in `functools.lru_cache`.
+- Add larger benchmark workloads.
+- Add optional time-based expiration (TTL).
+- Add an optional thread-safe implementation.
